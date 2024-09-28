@@ -19,7 +19,7 @@ private final AuthorDao authorDao;
 
     @Override
     public Author findById(Long id) {
-        return authorDao.findById(id);
+        return authorDao.findById(id).orElseThrow(()-> new RuntimeException("Автор не найден"));
     }
 
     @Override
@@ -33,7 +33,8 @@ private final AuthorDao authorDao;
     }
 
     @Override
-    public void update(Long id, Author author) {
-        authorDao.update(id, author);
+    public Author update(Long id, Author author) {
+        authorDao.findById(id).orElseThrow(()->new RuntimeException("Автор не найден"));
+        return authorDao.update(id, author);
     }
 }

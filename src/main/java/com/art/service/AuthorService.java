@@ -14,7 +14,7 @@ public interface AuthorService {
 
     void delete(Long id);
 
-    void update(Long id, Author author);
+    Author update(Long id, Author author);
 
 }
 
