@@ -16,8 +16,8 @@ public class AuthorDaoInMemory implements AuthorDao {
     }
 
     @Override
-    public Author findById(Long id) {
-        return authorMap.get(id);
+    public Optional <Author> findById(Long id) {
+        return Optional.ofNullable(authorMap.get(id));
     }
 
     @Override
@@ -33,9 +33,10 @@ public class AuthorDaoInMemory implements AuthorDao {
     }
 
     @Override
-    public void update(Long id, Author author) {
+    public Author update(Long id, Author author) {
         author.setId(id);
         authorMap.put(id, author);
+        return author;
     }
 
 }
