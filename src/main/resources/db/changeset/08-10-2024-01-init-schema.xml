@@ -1,0 +1,29 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="08-10-2024-01-init-schema" author="Artur Leshchenko">
+        <createTable tableName="author" remarks="Table of authors">
+            <column name="id" type="bigint" remarks="Id of author" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="first_name" type="text" remarks="First name of author">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="text" remarks="Last name of author">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="text" remarks="Middle name of author">
+                <constraints nullable="false"/>
+            </column>
+            <column name="birth_date" type="date" remarks="Birthdate of author">
+                <constraints nullable="false"/>
+            </column>
+            <column name="death_date" type="date" remarks="Death date of author">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

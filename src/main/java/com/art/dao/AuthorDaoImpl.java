@@ -19,7 +19,7 @@ public class AuthorDaoImpl implements AuthorDao {
     private static final String FIND_BY_ID = "select * from author where id = ?";
     private static final String SAVE = "insert into author (first_name, last_name, middle_name, birth_date, death_date ) values (?, ?, ?, ?, ?)";
     private static final String DELETE = "delete from author where id=?";
-    private static final String UPDATE = "update author set firstName=?, lastName=?, middleName=?, birth_date=?, death_date=?  where id=?";
+    private static final String UPDATE = "update author set first_name=?, last_name=?, middle_name=?, birth_date=?, death_date=?  where id=?";
     private final DataSource dataSource;
 
     @Override
@@ -89,6 +89,7 @@ public class AuthorDaoImpl implements AuthorDao {
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
             fillStatement(preparedStatement, author);
             preparedStatement.setLong(6, id);
+            author.setId(id);
             preparedStatement.executeUpdate();
             return author;
         } catch (SQLException e) {
