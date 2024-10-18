@@ -61,7 +61,6 @@ public class AuthorDaoImpl implements AuthorDao {
              PreparedStatement preparedStatement = connection.prepareStatement(SAVE, Statement.RETURN_GENERATED_KEYS)) {
             fillStatement(preparedStatement, author);
             preparedStatement.executeUpdate();
-
             ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
                 author.setId(generatedKeys.getLong(1));
@@ -104,6 +103,7 @@ public class AuthorDaoImpl implements AuthorDao {
         preparedStatement.setDate(4, Date.valueOf(author.getBirthDate()));
         preparedStatement.setDate(5, Date.valueOf(author.getDeathDate()));
     }
+
     private Author handleResultSet(ResultSet resultSet) throws SQLException {
         return new Author(
                 resultSet.getLong("id"),
