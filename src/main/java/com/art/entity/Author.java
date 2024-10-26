@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -18,9 +19,9 @@ public class Author {
     private String middleName;
     private LocalDate birthDate;
     private LocalDate deathDate;
-    private List<Book> books;
+    private List<Book> books = new ArrayList<>();
 
-    public Author(long id, String firstName, String lastName, String middleName, LocalDate birthDate, LocalDate deathDate) {
+    public Author(Long id, String firstName, String lastName, String middleName, LocalDate birthDate, LocalDate deathDate) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
