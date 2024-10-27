@@ -17,14 +17,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookDaoImpl implements BookDao {
     private static final String FIND_BOOK = "select * from books where author_id=?";
-
+    private static final String FIND_ALL = "select * from books limit ? offset ?;";
     private final DataSource dataSource;
 
     @Override
     public List<Book> findByAuthorId(Long authorId) {
         List<Book> books = new ArrayList<>();
-        try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BOOK)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BOOK)) {
             preparedStatement.setLong(1, authorId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
@@ -38,5 +38,29 @@ public class BookDaoImpl implements BookDao {
         } catch (SQLException e) {
             throw new SqlProcessingException(e);
         }
+
     }
+
+    @Override
+    public List<Book> findAll(int limit, int offset) {
+        List<Book> books = new ArrayList<>();
+        try {
+            Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL);
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, offset);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Book book = new Book(
+                        resultSet.getLong("id"),
+                        resultSet.getString("title")
+                );
+                books.add(book);
+            }
+            return books;
+        } catch (SQLException e) {
+            throw new SqlProcessingException(e);
+        }
+    }
+
 }

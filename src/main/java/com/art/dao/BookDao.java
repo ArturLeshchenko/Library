@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface BookDao {
     List<Book> findByAuthorId(Long authorId);
+    List<Book> findAll(int limit, int offset);
 }
