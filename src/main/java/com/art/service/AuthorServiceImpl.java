@@ -18,8 +18,9 @@ public class AuthorServiceImpl implements AuthorService {
     private final BookDao bookDao;
 
     @Override
-    public List<Author> findAll() {
-        return authorDao.findAll()
+    public List<Author> findAll(int pageSize, int pageNumber) {
+        int offset = pageSize * pageNumber;
+        return authorDao.findAll(pageSize, offset)
                 .stream()
                 .peek(author -> author.setBooks(bookDao.findByAuthorId(author.getId())))
                 .collect(Collectors.toList());

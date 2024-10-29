@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface AuthorDao {
 
-    List<Author> findAll();
+    List<Author> findAll(int limit, int offset);
 
     Optional<Author> findById(Long id);
 

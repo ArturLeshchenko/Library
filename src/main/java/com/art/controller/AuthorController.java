@@ -14,8 +14,9 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @GetMapping("/api/v1/authors")
-    public List<Author> findAll() {
-        return authorService.findAll();
+    public List<Author> findAll(@RequestParam int pageSize,
+                                @RequestParam int pageNumber) {
+        return authorService.findAll(pageSize, pageNumber);
     }
 
     @GetMapping("/api/v1/author/{id}")

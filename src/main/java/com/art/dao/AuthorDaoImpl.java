@@ -16,7 +16,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Repository
 public class AuthorDaoImpl implements AuthorDao {
-    private static final String FIND_ALL = "select author.id as author_id, first_name, middle_name, last_name, birth_date, death_date, books.id as book_id, title from author left join books ON author.id = books.author_id;";
+    private static final String FIND_ALL = "with limited_authors as (select author.id as author_id, first_name, middle_name, last_name, birth_date, death_date\n" +
+            "     from author limit ? offset ?)\n" +
+            "select limited_authors.*, books.id as book_id, books.title from limited_authors left join books ON limited_authors.author_id = books.author_id;";
     private static final String FIND_BY_ID = "select * from author where id = ?";
     private static final String SAVE = "insert into author (first_name, last_name, middle_name, birth_date, death_date ) values (?, ?, ?, ?, ?)";
     private static final String DELETE = "delete from author where id=?";
@@ -24,26 +26,26 @@ public class AuthorDaoImpl implements AuthorDao {
     private final DataSource dataSource;
 
     @Override
-    public List<Author> findAll() {
+    public List<Author> findAll(int limit, int offset) {
         Map<Long, Author> authors = new HashMap<>();
 
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_ALL)) {
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, offset);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Author currentAuthor = handleResultSetForAuthor(resultSet);
                 if (!authors.containsKey(currentAuthor.getId())) {
-                    List <Book> books = currentAuthor.getBooks();
+                    List<Book> books = currentAuthor.getBooks();
                     Book currentBook = handleResultSetForBook(resultSet);
                     books.add(currentBook);
-                    // запрашиваю у карентавтора список книг и кладу в этот список -  книгу из резалтсета
                     authors.put(currentAuthor.getId(), currentAuthor);
                 } else {
                     Author author = authors.get(currentAuthor.getId());
-                    List <Book> books = author.getBooks();
+                    List<Book> books = author.getBooks();
                     Book currentBook = handleResultSetForBook(resultSet);
                     books.add(currentBook);
-                    // достаю автора из мапы и беру у него список книг и кладу в этот список полученую из строки резалтсет книгу
                 }
             }
             return new ArrayList<>(authors.values());

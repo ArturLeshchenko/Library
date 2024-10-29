@@ -24,7 +24,7 @@ public class BookDaoImpl implements BookDao {
     public List<Book> findByAuthorId(Long authorId) {
         List<Book> books = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BOOK)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(FIND_BOOK)) {
             preparedStatement.setLong(1, authorId);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
