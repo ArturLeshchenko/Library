@@ -1,6 +1,7 @@
 package com.art.controller;
 
 import com.art.dto.AuthorDto;
+import com.art.dto.AuthorDtoShort;
 import com.art.entity.Author;
 import com.art.mapper.AuthorMapper;
 import com.art.service.AuthorService;
@@ -18,18 +19,19 @@ public class AuthorController {
     private final AuthorMapper authorMapper;
 
     @GetMapping("/api/v1/authors")
-    public List<AuthorDto> findAll() {
-        return authorService.findAll().stream().map(author -> authorMapper.mapToDto(author)).collect(Collectors.toList());
+    public List<AuthorDtoShort> findAll() {
+        return authorService.findAll().stream().map(author -> authorMapper.mapToDtoShort(author)).collect(Collectors.toList());
     }
 
     @GetMapping("/api/v1/author/{id}")
-    public Author findById(@PathVariable(name = "id") Long id) {
-        return authorService.findById(id);
+    public AuthorDto findById(@PathVariable(name = "id") Long id) {
+        return authorMapper.mapToDto(authorService.findById(id));
     }
 
     @PostMapping("/api/v1/author")
-    public Author save(@RequestBody Author author) {
-        return authorService.save(author);
+    public AuthorDtoShort save(@RequestBody AuthorDtoShort authorDtoShort) {
+        Author author = authorService.save(authorMapper.mapToEntity(authorDtoShort));
+        return authorMapper.mapToDtoShort(author);
     }
 
     @DeleteMapping("/api/v1/author/{id}")
@@ -38,7 +40,8 @@ public class AuthorController {
     }
 
     @PutMapping("/api/v1/author/{id}")
-    public Author update(@PathVariable Long id, @RequestBody Author author) {
-        return authorService.update(id, author);
+    public AuthorDtoShort update(@PathVariable Long id, @RequestBody AuthorDtoShort authorDtoShort) {
+        Author author = authorService.update(id, authorMapper.mapToEntity(authorDtoShort));
+        return authorMapper.mapToDtoShort(author);
     }
 }

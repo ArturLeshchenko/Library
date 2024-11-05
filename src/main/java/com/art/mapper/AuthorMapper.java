@@ -1,6 +1,7 @@
 package com.art.mapper;
 
 import com.art.dto.AuthorDto;
+import com.art.dto.AuthorDtoShort;
 import com.art.dto.BookDtoShort;
 import com.art.entity.Author;
 import com.art.entity.Book;
@@ -28,5 +29,25 @@ public class AuthorMapper {
        }
        authorDto.setBooks(bookDtoShortList);
        return authorDto;
+   }
+   public AuthorDtoShort mapToDtoShort(Author author) {
+       AuthorDtoShort authorDtoShort = new AuthorDtoShort();
+       authorDtoShort.setId(author.getId());
+       authorDtoShort.setFirstName(author.getFirstName());
+       authorDtoShort.setLastName(author.getLastName());
+       authorDtoShort.setMiddleName(author.getMiddleName());
+       authorDtoShort.setBirthDate(author.getBirthDate());
+       authorDtoShort.setDeathDate(author.getDeathDate());
+       return authorDtoShort;
+   }
+   public Author mapToEntity(AuthorDtoShort authorDtoShort) {
+       Author author = new Author();
+       author.setId(authorDtoShort.getId());
+       author.setFirstName(authorDtoShort.getFirstName());
+       author.setLastName(authorDtoShort.getLastName());
+       author.setMiddleName(authorDtoShort.getMiddleName());
+       author.setBirthDate(authorDtoShort.getBirthDate());
+       author.setDeathDate(authorDtoShort.getDeathDate());
+       return author;
    }
 }

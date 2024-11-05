@@ -37,6 +37,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public Author update(Long id, Author author) {
         authorRepository.findById(id).orElseThrow(() -> new RuntimeException("Автор не найден"));
+        author.setId(id);
         return authorRepository.save(author);
     }
 }
