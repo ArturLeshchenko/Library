@@ -1,52 +1,42 @@
 package com.art.service;
 
-import com.art.dao.AuthorDao;
-import com.art.dao.BookDao;
 import com.art.entity.Author;
-import com.art.entity.Book;
+import com.art.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
 
-    private final AuthorDao authorDao;
-    private final BookDao bookDao;
+    private final AuthorRepository authorRepository;
 
     @Override
-    public List<Author> findAll(int pageSize, int pageNumber) {
-        int offset = pageSize * pageNumber;
-        return authorDao.findAll(pageSize, offset)
-                .stream()
-                .peek(author -> author.setBooks(bookDao.findByAuthorId(author.getId())))
-                .collect(Collectors.toList());
+    public List<Author> findAll() {
+        return authorRepository.findAll();
     }
 
 
     @Override
     public Author findById(Long id) {
-         Author author = authorDao.findById(id).orElseThrow(() -> new RuntimeException("Автор не найден"));
-         author.setBooks(bookDao.findByAuthorId(author.getId()));
-        return author;
+        return authorRepository.findById(id).orElseThrow(() -> new RuntimeException("Автор не найден"));
     }
 
     @Override
     public Author save(Author author) {
-        return authorDao.save(author);
+        return authorRepository.save(author);
     }
 
     @Override
     public void delete(Long id) {
-        authorDao.delete(id);
+        authorRepository.deleteById(id);
     }
 
     @Override
     public Author update(Long id, Author author) {
-        authorDao.findById(id).orElseThrow(() -> new RuntimeException("Автор не найден"));
-        return authorDao.update(id, author);
+        authorRepository.findById(id).orElseThrow(() -> new RuntimeException("Автор не найден"));
+        return authorRepository.save(author);
     }
 }

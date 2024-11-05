@@ -1,22 +1,25 @@
 package com.art.controller;
 
+import com.art.dto.AuthorDto;
 import com.art.entity.Author;
+import com.art.mapper.AuthorMapper;
 import com.art.service.AuthorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RestController
 @RequiredArgsConstructor
 public class AuthorController {
     private final AuthorService authorService;
+    private final AuthorMapper authorMapper;
 
     @GetMapping("/api/v1/authors")
-    public List<Author> findAll(@RequestParam int pageSize,
-                                @RequestParam int pageNumber) {
-        return authorService.findAll(pageSize, pageNumber);
+    public List<AuthorDto> findAll() {
+        return authorService.findAll().stream().map(author -> authorMapper.mapToDto(author)).collect(Collectors.toList());
     }
 
     @GetMapping("/api/v1/author/{id}")

@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface AuthorService {
 
-    List<Author> findAll(int pageSize, int pageNumber);
+    List<Author> findAll();
 
     Author findById(Long id);
 
