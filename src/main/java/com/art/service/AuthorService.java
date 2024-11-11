@@ -9,7 +9,7 @@ public interface AuthorService {
 
     List<Author> findAll();
 
-    Author findById(Long id);
+    Author findById(Long id, boolean isExtended);
 
     Author save(Author author);
 

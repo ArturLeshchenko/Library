@@ -6,6 +6,7 @@ import com.art.entity.Author;
 import com.art.mapper.AuthorMapper;
 import com.art.service.AuthorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class AuthorController {
     private final AuthorService authorService;
     private final AuthorMapper authorMapper;
 
+
     @GetMapping("/api/v1/authors")
     public List<AuthorDtoShort> findAll() {
         return authorService.findAll().stream().map(author -> authorMapper.mapToDtoShort(author)).collect(Collectors.toList());
@@ -25,7 +27,12 @@ public class AuthorController {
 
     @GetMapping("/api/v1/author/{id}")
     public AuthorDto findById(@PathVariable(name = "id") Long id) {
-        return authorMapper.mapToDto(authorService.findById(id));
+        return authorMapper.mapToDto(authorService.findById(id, true));
+    }
+
+    @GetMapping("/api/v1/author/{id}/short")
+    public AuthorDtoShort findByIdWithoutBooks(@PathVariable(name = "id") Long id) {
+        return authorMapper.mapToDtoShort(authorService.findById(id, false));
     }
 
     @PostMapping("/api/v1/author")
@@ -44,4 +51,5 @@ public class AuthorController {
         Author author = authorService.update(id, authorMapper.mapToEntity(authorDtoShort));
         return authorMapper.mapToDtoShort(author);
     }
+
 }

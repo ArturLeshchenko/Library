@@ -20,7 +20,10 @@ public class AuthorServiceImpl implements AuthorService {
 
 
     @Override
-    public Author findById(Long id) {
+    public Author findById(Long id, boolean isExtended) {
+        if (isExtended) {
+            return authorRepository.findByIdWithBooks(id).orElseThrow(() -> new RuntimeException("Автор не найден"));
+        }
         return authorRepository.findById(id).orElseThrow(() -> new RuntimeException("Автор не найден"));
     }
 
